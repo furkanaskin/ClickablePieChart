@@ -138,11 +138,10 @@ class ClickablePieChart @JvmOverloads constructor(
 
         popupView.findViewById<TextView>(R.id.textViewInfo).text = center.toString()
 
-        center -= 90
         val calculatedX =
-            ((halfRadius) * cos(center)).toInt()
+            ((halfRadius) * cos(Math.toRadians(center))).toInt()
         val calculatedY =
-            ((halfRadius) * sin(center)).toInt()
+            ((halfRadius) * sin(Math.toRadians(center))).toInt()
 
         val currentViewLocation = IntArray(2)
         this.getLocationOnScreen(currentViewLocation)
