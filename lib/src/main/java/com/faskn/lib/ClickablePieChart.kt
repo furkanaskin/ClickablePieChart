@@ -12,12 +12,14 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.RectF
 import android.util.AttributeSet
+import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.widget.*
 import androidx.core.content.ContextCompat
+import androidx.core.view.doOnPreDraw
 import androidx.core.widget.ImageViewCompat
 import kotlin.math.atan2
 import kotlin.math.cos
@@ -150,12 +152,28 @@ class ClickablePieChart @JvmOverloads constructor(
         val currentViewLocation = IntArray(2)
         this.getLocationOnScreen(currentViewLocation)
 
+        val halfOfSliceWidth = (sliceWidth / 2).toInt()
+        val popupWindowX =
+            (currentViewLocation[0] + halfRadius.toInt()) + calculatedX -
+                    (if (calculatedX < 0) -halfOfSliceWidth else halfOfSliceWidth)
+        val popupWindowY =
+            (currentViewLocation[1] + halfRadius.toInt()) + calculatedY -
+                    (if (calculatedY < 0) -halfOfSliceWidth else halfOfSliceWidth)
         popupWindow.showAtLocation(
             this,
             Gravity.NO_GRAVITY,
-            (currentViewLocation[0] + halfRadius.toInt()) + calculatedX,
-            (currentViewLocation[1] + halfRadius.toInt()) + calculatedY
+            popupWindowX,
+            popupWindowY
         )
+
+        popupView.doOnPreDraw {
+            popupWindow.update(
+                (popupWindowX - (it.width / 2)),
+                popupWindowY,
+                popupWindow.width,
+                popupWindow.height
+            )
+        }
 
         val currentData = dataPoints[index]
 
