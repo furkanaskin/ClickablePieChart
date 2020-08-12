@@ -6,6 +6,7 @@ package com.faskn.lib
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.res.ColorStateList
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
@@ -15,10 +16,9 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
-import android.widget.LinearLayout
-import android.widget.PopupWindow
-import android.widget.TextView
+import android.widget.*
 import androidx.core.content.ContextCompat
+import androidx.core.widget.ImageViewCompat
 import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.sin
@@ -129,14 +129,18 @@ class ClickablePieChart @JvmOverloads constructor(
 
     private fun showInfoPopup(index: Int) {
         val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val popupView = inflater.inflate(R.layout.layout_info, null)
+        val popupView = inflater.inflate(R.layout.popup_slice, null)
         val width = LinearLayout.LayoutParams.WRAP_CONTENT
         val height = LinearLayout.LayoutParams.WRAP_CONTENT
         val popupWindow = PopupWindow(popupView, width, height, true)
         var center = pointsArray[index].toList().average()
         val halfRadius = rectF!!.centerX()
 
-        popupView.findViewById<TextView>(R.id.textViewInfo).text = center.toString()
+        popupView.findViewById<TextView>(R.id.textViewPopupText).text = "${center.toInt()} ziyaret"
+        ImageViewCompat.setImageTintList(
+            popupView.findViewById<ImageView>(R.id.imageViewPopupCircleIndicator),
+            ColorStateList.valueOf(ContextCompat.getColor(context, sliceColors[index]))
+        )
 
         val calculatedX =
             ((halfRadius) * cos(Math.toRadians(center))).toInt()

@@ -3,8 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="105dp"
-    android:layout_height="32dp"
-    android:orientation="vertical">
+    android:layout_height="wrap_content">
 
     <ImageView
         android:id="@+id/imageViewFixedTriangle"
@@ -17,17 +16,18 @@
 
     <androidx.cardview.widget.CardView
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="32dp"
         android:layout_below="@+id/imageViewFixedTriangle"
-        android:layout_alignParentBottom="true"
+        android:layout_marginStart="1dp"
         android:layout_marginTop="-1dp"
+        android:layout_marginEnd="1dp"
+        android:layout_marginBottom="1dp"
         android:elevation="10dp"
         app:cardCornerRadius="5dp">
 
         <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_alignParentBottom="true">
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
 
             <ImageView
                 android:id="@+id/imageViewPopupCircleIndicator"
@@ -41,10 +41,9 @@
                 android:id="@+id/textViewPopupText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:layout_marginStart="4dp"
-                android:layout_marginEnd="5dp"
+                android:layout_marginEnd="11dp"
                 android:layout_toEndOf="@+id/imageViewPopupCircleIndicator"
                 android:ellipsize="end"
                 android:maxLines="1"
