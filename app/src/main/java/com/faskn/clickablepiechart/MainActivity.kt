@@ -17,12 +17,12 @@ class MainActivity : AppCompatActivity() {
         // Example
         val pieChart0 = PieChart.Builder(
             arrayOf(
-                Slice(30f, R.color.brown700),
-                Slice(60f, R.color.materialRed700),
+                Slice(30f, R.color.colorPrimary),
+                Slice(60f, R.color.colorPrimaryDark),
                 Slice(120f, R.color.materialIndigo600),
-                Slice(150f, R.color.materialRed400)
+                Slice(150f, R.color.colorAccent)
             )
-        )
+        ).setSliceStartPoint(-90f)
             .setClickListener { string, float ->
                 Log.d("ses", "s " + string)
                 Log.d("ses", "f " + float.toString())
@@ -32,10 +32,10 @@ class MainActivity : AppCompatActivity() {
         // Example 2
         val pieChart1 = PieChart.Builder(
             arrayOf(
-                Slice(Random.nextInt(0, 100).toFloat(), R.color.brown700),
-                Slice(Random.nextInt(0, 100).toFloat(), R.color.materialRed700),
+                Slice(Random.nextInt(0, 100).toFloat(), R.color.colorPrimary),
+                Slice(Random.nextInt(0, 100).toFloat(), R.color.colorPrimaryDark),
                 Slice(Random.nextInt(0, 100).toFloat(), R.color.materialIndigo600),
-                Slice(Random.nextInt(0, 100).toFloat(), R.color.materialRed400)
+                Slice(Random.nextInt(0, 100).toFloat(), R.color.colorAccent)
             )
         )
             .setClickListener { string, float ->

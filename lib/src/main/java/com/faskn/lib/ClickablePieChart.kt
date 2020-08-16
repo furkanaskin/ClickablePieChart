@@ -12,12 +12,15 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.RectF
 import android.util.AttributeSet
+import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.animation.LinearInterpolator
-import android.widget.*
+import android.widget.LinearLayout
+import android.widget.PopupWindow
+import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.view.doOnPreDraw
 import androidx.core.widget.ImageViewCompat
@@ -35,8 +38,6 @@ class ClickablePieChart @JvmOverloads constructor(
     private var slicePaint: Paint = Paint()
     private var centerPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
     private var rectF: RectF? = null
-    private var sliceStartPoint = 0F // FIXME: 16-Aug-20 remove if unnecessary
-    private var sliceWidth = 80f
     private var touchX = 0f
     private var touchY = 0f
 
@@ -49,7 +50,7 @@ class ClickablePieChart @JvmOverloads constructor(
     private var currentSweepAngle = 0
 
     // Attributes
-    private lateinit var popupText: String
+    private var popupText: String? = null
 
     init {
         initAttributes(attrs)
@@ -72,7 +73,7 @@ class ClickablePieChart @JvmOverloads constructor(
             context.theme.obtainStyledAttributes(attrs, R.styleable.ClickablePieChart, 0, 0)
 
         try {
-            popupText = typedArray.getString(R.styleable.ClickablePieChart_popupText)!!
+            popupText = typedArray.getString(R.styleable.ClickablePieChart_popupText) ?: ""
         } finally {
             typedArray.recycle()
         }
@@ -163,18 +164,21 @@ class ClickablePieChart @JvmOverloads constructor(
                     )
                 )
 
-                // FIXME: 16-Aug-20 Remove subtraction if unnecessary. On runtime sliceStartPoint is always 0f.
-//                touchAngle -= sliceStartPoint
-                touchAngle %= 360
+                Log.v("qqq", touchAngle.toString())
+
+
+                touchAngle -= pieChart?.sliceStartPoint ?: 0f
 
                 if (touchAngle < 0) {
                     touchAngle += 360.0
                 }
 
+                Log.v("qqq", touchAngle.toString())
+
                 var total = 0.0f
                 var forEachStopper = false // what a idiot stuff
                 slices.forEachIndexed { index, slice ->
-                    total += slice.dataPoint % 360f
+                    total += (slice.dataPoint) % 360f
                     if (touchAngle <= total && !forEachStopper) {
                         pieChart?.clickListener?.invoke(touchAngle.toString(), index.toFloat())
                         forEachStopper = true
@@ -194,13 +198,13 @@ class ClickablePieChart @JvmOverloads constructor(
         val width = LinearLayout.LayoutParams.WRAP_CONTENT
         val height = LinearLayout.LayoutParams.WRAP_CONTENT
         val popupWindow = PopupWindow(popupView, width, height, true)
-        var center = slices[index].arc?.average()!!
+        var center = slices[index].arc?.average()!! + pieChart?.sliceStartPoint?.toDouble()!!
         val halfRadius = rectF!!.centerX()
 
         popupView.findViewById<TextView>(R.id.textViewPopupText).text =
-            "${center.toInt()} $popupText"
+            "${slices[index].arc?.average()?.toInt()} $popupText"
         ImageViewCompat.setImageTintList(
-            popupView.findViewById<ImageView>(R.id.imageViewPopupCircleIndicator),
+            popupView.findViewById(R.id.imageViewPopupCircleIndicator),
             ColorStateList.valueOf(ContextCompat.getColor(context, slices[index].color))
         )
 
@@ -239,6 +243,7 @@ class ClickablePieChart @JvmOverloads constructor(
     fun setPieChart(pieChart: PieChart) {
         this.pieChart = pieChart
         init()
+        invalidateAndRequestLayout()
     }
 
     fun setCenterColor(colorId: Int) {

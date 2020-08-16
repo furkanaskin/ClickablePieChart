@@ -7,13 +7,13 @@ package com.faskn.lib
 class PieChart private constructor(
     var slices: Array<Slice>,
     var clickListener: ((String, Float) -> Unit)? = null,
-    var sliceStartPoint: Float,
-    var sliceWidth: Float
+    var sliceStartPoint: Float = 0f,
+    var sliceWidth: Float = 80f
 ) {
     data class Builder(
         private var slices: Array<Slice>,
         private var clickListener: ((String, Float) -> Unit)? = null,
-        private var sliceStartPoint: Float? = 0f,
+        private var sliceStartPoint: Float? = 90f,
         private var sliceWidth: Float? = 80f
     ) {
         init {
