@@ -12,7 +12,6 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.RectF
 import android.util.AttributeSet
-import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -44,6 +43,9 @@ class ClickablePieChart @JvmOverloads constructor(
     private var clickListener: ((String, Float) -> Unit)? = null
     private var pointsArray = arrayListOf<Pair<Float, Float>>()
 
+    // Attributes
+    private lateinit var popupText: String
+
     init {
         slicePaint.isAntiAlias = true
         slicePaint.isDither = true
@@ -51,6 +53,19 @@ class ClickablePieChart @JvmOverloads constructor(
 
         centerPaint.color = Color.WHITE
         centerPaint.style = Paint.Style.FILL
+
+        initAttributes(attrs)
+    }
+
+    private fun initAttributes(attrs: AttributeSet?) {
+        val typedArray =
+            context.theme.obtainStyledAttributes(attrs, R.styleable.ClickablePieChart, 0, 0)
+
+        try {
+            popupText = typedArray.getString(R.styleable.ClickablePieChart_popupText)!!
+        } finally {
+            typedArray.recycle()
+        }
     }
 
     private fun scale(): FloatArray {
@@ -138,7 +153,7 @@ class ClickablePieChart @JvmOverloads constructor(
         var center = pointsArray[index].toList().average()
         val halfRadius = rectF!!.centerX()
 
-        popupView.findViewById<TextView>(R.id.textViewPopupText).text = "${center.toInt()} ziyaret"
+        popupView.findViewById<TextView>(R.id.textViewPopupText).text = "${center.toInt()} $popupText"
         ImageViewCompat.setImageTintList(
             popupView.findViewById<ImageView>(R.id.imageViewPopupCircleIndicator),
             ColorStateList.valueOf(ContextCompat.getColor(context, sliceColors[index]))
