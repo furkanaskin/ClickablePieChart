@@ -4,7 +4,7 @@ package com.faskn.lib
  * Created by Furkan on 6.08.2020
  */
 
-import android.annotation.SuppressLint
+import android.animation.ValueAnimator
 import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Canvas
@@ -16,6 +16,7 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
+import android.view.animation.LinearInterpolator
 import android.widget.*
 import androidx.core.content.ContextCompat
 import androidx.core.view.doOnPreDraw
@@ -27,26 +28,34 @@ import kotlin.math.sin
 
 class ClickablePieChart @JvmOverloads constructor(
     context: Context,
-    attrs: AttributeSet? = null,
+    private val attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
 ) : View(context, attrs, defStyleAttr) {
 
     private var slicePaint: Paint = Paint()
     private var centerPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
-    private var sliceColors: IntArray = intArrayOf(Color.RED, Color.GREEN, Color.BLUE, Color.YELLOW)
     private var rectF: RectF? = null
-    private var dataPoints: FloatArray = floatArrayOf()
-    private var sliceStartPoint = 0F
+    private var sliceStartPoint = 0F // FIXME: 16-Aug-20 remove if unnecessary
     private var sliceWidth = 80f
     private var touchX = 0f
     private var touchY = 0f
-    private var clickListener: ((String, Float) -> Unit)? = null
-    private var pointsArray = arrayListOf<Pair<Float, Float>>()
+
+    // PieChart variables
+    private var pieChart: PieChart? = null
+    private lateinit var slices: List<Slice>
+
+    // Animation variables
+    private var animator: ValueAnimator? = null
+    private var currentSweepAngle = 0
 
     // Attributes
     private lateinit var popupText: String
 
     init {
+        initAttributes(attrs)
+    }
+
+    private fun init() {
         slicePaint.isAntiAlias = true
         slicePaint.isDither = true
         slicePaint.style = Paint.Style.FILL
@@ -54,7 +63,8 @@ class ClickablePieChart @JvmOverloads constructor(
         centerPaint.color = Color.WHITE
         centerPaint.style = Paint.Style.FILL
 
-        initAttributes(attrs)
+        initSlices()
+        startAnimation()
     }
 
     private fun initAttributes(attrs: AttributeSet?) {
@@ -68,17 +78,25 @@ class ClickablePieChart @JvmOverloads constructor(
         }
     }
 
-    private fun scale(): FloatArray {
-        val scaledValues = FloatArray(dataPoints.size)
-        for (i in dataPoints.indices) {
-            scaledValues.fill((dataPoints[i] / getTotal()) * 360, i, dataPoints.size)
-        }
-        return scaledValues
+    private fun initSlices() {
+        slices = pieChart?.slices?.toList()!!
     }
 
-    @SuppressLint("DrawAllocation")
-    override fun onDraw(canvas: Canvas?) {
-        super.onDraw(canvas)
+    private fun startAnimation() {
+        animator?.cancel()
+        animator = ValueAnimator.ofInt(0, 360).apply {
+            duration = 1000
+            interpolator = LinearInterpolator()
+            addUpdateListener { valueAnimator ->
+                currentSweepAngle = valueAnimator.animatedValue as Int
+                invalidate()
+            }
+        }
+        animator?.start()
+    }
+
+    override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
+        super.onSizeChanged(w, h, oldw, oldh)
 
         rectF = RectF(
             0f,
@@ -86,24 +104,49 @@ class ClickablePieChart @JvmOverloads constructor(
             width.coerceAtMost(height).toFloat(),
             width.coerceAtMost(height).toFloat()
         )
-
-        val scaledValues = scale()
-
-        for (i in scaledValues.indices) {
-            slicePaint.color = ContextCompat.getColor(context, sliceColors[i])
-            canvas!!.drawArc(rectF!!, sliceStartPoint, scaledValues[i], true, slicePaint)
-            pointsArray.add(Pair(sliceStartPoint, sliceStartPoint + scaledValues[i]))
-            sliceStartPoint += scaledValues[i]
-        }
-
-        val centerX = (measuredWidth / 2).toFloat()
-        val centerY = (measuredHeight / 2).toFloat()
-        val radius = centerX.coerceAtMost(centerY)
-
-        canvas!!.drawCircle(rectF!!.centerX(), rectF!!.centerY(), radius - sliceWidth, centerPaint)
     }
 
-    private fun getTotal(): Float = dataPoints.sum()
+    override fun onDraw(canvas: Canvas?) {
+        super.onDraw(canvas)
+
+        if (pieChart != null) {
+            slices.forEach { slice ->
+                val arc = slice.arc!!
+                if (currentSweepAngle > arc.startAngle + arc.sweepAngle) {
+                    slicePaint.color = ContextCompat.getColor(context, slice.color)
+                    canvas?.drawArc(
+                        rectF!!,
+                        pieChart?.sliceStartPoint!! + arc.startAngle,
+                        arc.sweepAngle,
+                        true,
+                        slicePaint
+                    )
+                } else {
+                    if (currentSweepAngle > arc.startAngle) {
+                        slicePaint.color = ContextCompat.getColor(context, slice.color)
+                        canvas?.drawArc(
+                            rectF!!,
+                            pieChart?.sliceStartPoint!! + arc.startAngle,
+                            currentSweepAngle - arc.startAngle,
+                            true,
+                            slicePaint
+                        )
+                    }
+                }
+            }
+
+            val centerX = (measuredWidth / 2).toFloat()
+            val centerY = (measuredHeight / 2).toFloat()
+            val radius = centerX.coerceAtMost(centerY)
+
+            canvas!!.drawCircle(
+                rectF!!.centerX(),
+                rectF!!.centerY(),
+                radius - pieChart?.sliceWidth!!,
+                centerPaint
+            )
+        }
+    }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         return when (event?.action) {
@@ -120,7 +163,8 @@ class ClickablePieChart @JvmOverloads constructor(
                     )
                 )
 
-                touchAngle -= sliceStartPoint
+                // FIXME: 16-Aug-20 Remove subtraction if unnecessary. On runtime sliceStartPoint is always 0f.
+//                touchAngle -= sliceStartPoint
                 touchAngle %= 360
 
                 if (touchAngle < 0) {
@@ -129,10 +173,10 @@ class ClickablePieChart @JvmOverloads constructor(
 
                 var total = 0.0f
                 var forEachStopper = false // what a idiot stuff
-                dataPoints.forEachIndexed { index, data ->
-                    total += data % 360f
+                slices.forEachIndexed { index, slice ->
+                    total += slice.dataPoint % 360f
                     if (touchAngle <= total && !forEachStopper) {
-                        clickListener?.invoke(touchAngle.toString(), index.toFloat())
+                        pieChart?.clickListener?.invoke(touchAngle.toString(), index.toFloat())
                         forEachStopper = true
                         showInfoPopup(index)
                     }
@@ -150,13 +194,14 @@ class ClickablePieChart @JvmOverloads constructor(
         val width = LinearLayout.LayoutParams.WRAP_CONTENT
         val height = LinearLayout.LayoutParams.WRAP_CONTENT
         val popupWindow = PopupWindow(popupView, width, height, true)
-        var center = pointsArray[index].toList().average()
+        var center = slices[index].arc?.average()!!
         val halfRadius = rectF!!.centerX()
 
-        popupView.findViewById<TextView>(R.id.textViewPopupText).text = "${center.toInt()} $popupText"
+        popupView.findViewById<TextView>(R.id.textViewPopupText).text =
+            "${center.toInt()} $popupText"
         ImageViewCompat.setImageTintList(
             popupView.findViewById<ImageView>(R.id.imageViewPopupCircleIndicator),
-            ColorStateList.valueOf(ContextCompat.getColor(context, sliceColors[index]))
+            ColorStateList.valueOf(ContextCompat.getColor(context, slices[index].color))
         )
 
         val calculatedX =
@@ -167,7 +212,7 @@ class ClickablePieChart @JvmOverloads constructor(
         val currentViewLocation = IntArray(2)
         this.getLocationOnScreen(currentViewLocation)
 
-        val halfOfSliceWidth = (sliceWidth / 2).toInt()
+        val halfOfSliceWidth = (pieChart?.sliceWidth?.p2d(context)!! / 2).toInt()
         val popupWindowX =
             (currentViewLocation[0] + halfRadius.toInt()) + calculatedX -
                     (if (calculatedX < 0) -halfOfSliceWidth else halfOfSliceWidth)
@@ -189,35 +234,15 @@ class ClickablePieChart @JvmOverloads constructor(
                 popupWindow.height
             )
         }
-
-        val currentData = dataPoints[index]
-
     }
 
-    fun setSliceWidth(width: Float) {
-        sliceWidth = width.p2d(context)
-    }
-
-    fun setListener(listener: (String, Float) -> (Unit)) {
-        clickListener = listener
-    }
-
-    fun setStartPoint(point: Float) {
-        sliceStartPoint = point
-    }
-
-    fun setDataPoints(data: FloatArray) {
-        dataPoints = data
-        invalidateAndRequestLayout()
+    fun setPieChart(pieChart: PieChart) {
+        this.pieChart = pieChart
+        init()
     }
 
     fun setCenterColor(colorId: Int) {
         centerPaint.color = ContextCompat.getColor(context, colorId)
-        invalidateAndRequestLayout()
-    }
-
-    fun setSliceColor(colors: IntArray) {
-        sliceColors = colors
         invalidateAndRequestLayout()
     }
 

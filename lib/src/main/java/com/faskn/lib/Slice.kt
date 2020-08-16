@@ -6,5 +6,14 @@ package com.faskn.lib
 
 data class Slice(
     val dataPoint: Float,
-    val color: Int
+    val color: Int,
+    var arc: Arc? = null
 )
+
+data class Arc(
+    val startAngle: Float,
+    val sweepAngle: Float
+) {
+    fun average(): Double =
+        (startAngle / 2) + (sweepAngle / 2) + (((startAngle % 2) + (sweepAngle % 2)) / 2).toDouble()
+}
