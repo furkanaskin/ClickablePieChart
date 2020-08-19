@@ -196,7 +196,7 @@ class ClickablePieChart @JvmOverloads constructor(
         val halfRadius = rectF!!.centerX()
 
         popupView.findViewById<TextView>(R.id.textViewPopupText).text =
-            "${slices[index].dataPoint} $popupText"
+            "${slices[index].dataPoint.toInt()} $popupText"
         ImageViewCompat.setImageTintList(
             popupView.findViewById(R.id.imageViewPopupCircleIndicator),
             ColorStateList.valueOf(ContextCompat.getColor(context, slices[index].color))
