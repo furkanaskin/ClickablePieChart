@@ -1,5 +1,7 @@
 package com.faskn.lib
 
+import android.util.Log
+
 /**
  * Created by turkergoksu on 12-Aug-20
  */
@@ -13,7 +15,7 @@ class PieChart private constructor(
     data class Builder(
         private var slices: Array<Slice>,
         private var clickListener: ((String, Float) -> Unit)? = null,
-        private var sliceStartPoint: Float? = 90f,
+        private var sliceStartPoint: Float? = 0f,
         private var sliceWidth: Float? = 80f
     ) {
         init {
@@ -42,6 +44,7 @@ class PieChart private constructor(
         private fun initScaledArcs() {
             slices.forEachIndexed { i, slice ->
                 val scaledValue = (slice.dataPoint / getSumOfDataPoints()) * 360
+                slice.scaledValue = scaledValue
                 if (i != 0) {
                     slice.arc = Arc(
                         slices[i - 1].arc?.sweepAngle!!,

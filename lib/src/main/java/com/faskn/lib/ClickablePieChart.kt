@@ -12,7 +12,6 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.RectF
 import android.util.AttributeSet
-import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -164,21 +163,16 @@ class ClickablePieChart @JvmOverloads constructor(
                     )
                 )
 
-                Log.v("qqq", touchAngle.toString())
-
-
                 touchAngle -= pieChart?.sliceStartPoint ?: 0f
 
                 if (touchAngle < 0) {
                     touchAngle += 360.0
                 }
 
-                Log.v("qqq", touchAngle.toString())
-
                 var total = 0.0f
                 var forEachStopper = false // what a idiot stuff
                 slices.forEachIndexed { index, slice ->
-                    total += (slice.dataPoint) % 360f
+                    total += (slice.scaledValue ?: 0f) % 360f
                     if (touchAngle <= total && !forEachStopper) {
                         pieChart?.clickListener?.invoke(touchAngle.toString(), index.toFloat())
                         forEachStopper = true
@@ -202,7 +196,7 @@ class ClickablePieChart @JvmOverloads constructor(
         val halfRadius = rectF!!.centerX()
 
         popupView.findViewById<TextView>(R.id.textViewPopupText).text =
-            "${slices[index].arc?.average()?.toInt()} $popupText"
+            "${slices[index].dataPoint} $popupText"
         ImageViewCompat.setImageTintList(
             popupView.findViewById(R.id.imageViewPopupCircleIndicator),
             ColorStateList.valueOf(ContextCompat.getColor(context, slices[index].color))

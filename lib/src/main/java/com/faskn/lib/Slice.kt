@@ -7,7 +7,8 @@ package com.faskn.lib
 data class Slice(
     val dataPoint: Float,
     val color: Int,
-    var arc: Arc? = null
+    var arc: Arc? = null,
+    var scaledValue : Float? = 0f
 )
 
 data class Arc(
