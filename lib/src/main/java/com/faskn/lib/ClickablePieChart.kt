@@ -42,7 +42,7 @@ class ClickablePieChart @JvmOverloads constructor(
 
     // PieChart variables
     private var pieChart: PieChart? = null
-    private lateinit var slices: List<Slice>
+    private var slices: List<Slice>? = null
 
     // Animation variables
     private var animator: ValueAnimator? = null
@@ -79,7 +79,7 @@ class ClickablePieChart @JvmOverloads constructor(
     }
 
     private fun initSlices() {
-        slices = pieChart?.slices?.toList()!!
+        slices = pieChart?.slices?.toList()
     }
 
     private fun startAnimation() {
@@ -109,8 +109,12 @@ class ClickablePieChart @JvmOverloads constructor(
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
 
-        if (pieChart != null) {
-            slices.forEach { slice ->
+        val centerX = (measuredWidth / 2).toFloat()
+        val centerY = (measuredHeight / 2).toFloat()
+        val radius = centerX.coerceAtMost(centerY)
+
+        if (slices.isNullOrEmpty().not()) {
+            slices?.forEach { slice ->
                 val arc = slice.arc!!
                 if (currentSweepAngle > arc.startAngle + arc.sweepAngle) {
                     slicePaint.color = ContextCompat.getColor(context, slice.color)
@@ -135,16 +139,24 @@ class ClickablePieChart @JvmOverloads constructor(
                 }
             }
 
-            val centerX = (measuredWidth / 2).toFloat()
-            val centerY = (measuredHeight / 2).toFloat()
-            val radius = centerX.coerceAtMost(centerY)
-
             canvas!!.drawCircle(
                 rectF!!.centerX(),
                 rectF!!.centerY(),
                 radius - pieChart?.sliceWidth!!,
                 centerPaint
             )
+
+        } else {
+            val width = pieChart?.sliceWidth ?: 80f
+            slicePaint.color = ContextCompat.getColor(context, R.color.semiGray)
+            canvas!!.drawArc(rectF!!, 0f, 360f, true, slicePaint)
+            canvas.drawCircle(
+                rectF!!.centerX(),
+                rectF!!.centerY(),
+                radius - width,
+                centerPaint
+            )
+
         }
     }
 
@@ -171,7 +183,7 @@ class ClickablePieChart @JvmOverloads constructor(
 
                 var total = 0.0f
                 var forEachStopper = false // what a idiot stuff
-                slices.forEachIndexed { index, slice ->
+                slices?.forEachIndexed { index, slice ->
                     total += (slice.scaledValue ?: 0f) % 360f
                     if (touchAngle <= total && !forEachStopper) {
                         pieChart?.clickListener?.invoke(touchAngle.toString(), index.toFloat())
@@ -192,14 +204,19 @@ class ClickablePieChart @JvmOverloads constructor(
         val width = LinearLayout.LayoutParams.WRAP_CONTENT
         val height = LinearLayout.LayoutParams.WRAP_CONTENT
         val popupWindow = PopupWindow(popupView, width, height, true)
-        var center = slices[index].arc?.average()!! + pieChart?.sliceStartPoint?.toDouble()!!
+        var center = slices?.get(index)?.arc?.average()!! + pieChart?.sliceStartPoint?.toDouble()!!
         val halfRadius = rectF!!.centerX()
 
         popupView.findViewById<TextView>(R.id.textViewPopupText).text =
-            "${slices[index].dataPoint.toInt()} $popupText"
+            "${slices?.get(index)!!.dataPoint.toInt()} $popupText"
         ImageViewCompat.setImageTintList(
             popupView.findViewById(R.id.imageViewPopupCircleIndicator),
-            ColorStateList.valueOf(ContextCompat.getColor(context, slices[index].color))
+            ColorStateList.valueOf(
+                ContextCompat.getColor(
+                    context,
+                    slices?.get(index)?.color ?: R.color.semiGray
+                )
+            )
         )
 
         val calculatedX =

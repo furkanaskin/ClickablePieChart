@@ -1,19 +1,17 @@
 package com.faskn.lib
 
-import android.util.Log
-
 /**
  * Created by turkergoksu on 12-Aug-20
  */
 
 class PieChart private constructor(
-    var slices: Array<Slice>,
+    var slices: Array<Slice>?,
     var clickListener: ((String, Float) -> Unit)? = null,
     var sliceStartPoint: Float = 0f,
-    var sliceWidth: Float = 80f
+    var sliceWidth: Float? = 80f
 ) {
     data class Builder(
-        private var slices: Array<Slice>,
+        private var slices: Array<Slice>? = null,
         private var clickListener: ((String, Float) -> Unit)? = null,
         private var sliceStartPoint: Float? = 0f,
         private var sliceWidth: Float? = 80f
@@ -42,22 +40,24 @@ class PieChart private constructor(
             )
 
         private fun initScaledArcs() {
-            slices.forEachIndexed { i, slice ->
-                val scaledValue = (slice.dataPoint / getSumOfDataPoints()) * 360
-                slice.scaledValue = scaledValue
-                if (i != 0) {
-                    slice.arc = Arc(
-                        slices[i - 1].arc?.sweepAngle!!,
-                        slices[i - 1].arc?.sweepAngle!!.plus(scaledValue)
-                    )
-                } else {
-                    slice.arc = Arc(0f, scaledValue)
+            if (slices != null) {
+                slices!!.forEachIndexed { i, slice ->
+                    val scaledValue = (slice.dataPoint / getSumOfDataPoints()) * 360
+                    slice.scaledValue = scaledValue
+                    if (i != 0) {
+                        slice.arc = Arc(
+                            slices!![i - 1].arc?.sweepAngle!!,
+                            slices!![i - 1].arc?.sweepAngle!!.plus(scaledValue)
+                        )
+                    } else {
+                        slice.arc = Arc(0f, scaledValue)
+                    }
                 }
             }
         }
 
         private fun getSumOfDataPoints(): Float {
-            return slices.sumByDouble { slice -> slice.dataPoint.toDouble() }.toFloat()
+            return slices?.sumByDouble { slice -> slice.dataPoint.toDouble() }?.toFloat() ?: 0f
         }
     }
 }

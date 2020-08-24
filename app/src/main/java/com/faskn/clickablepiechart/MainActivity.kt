@@ -15,19 +15,19 @@ class MainActivity : AppCompatActivity() {
         chart.setCenterColor(R.color.white)
 
         // Example
-       /* val pieChart0 = PieChart.Builder(
-            arrayOf(
-                Slice(30f, R.color.colorPrimary),
-                Slice(60f, R.color.colorPrimaryDark),
-                Slice(120f, R.color.materialIndigo600),
-                Slice(150f, R.color.colorAccent)
-            )
-        ).setSliceStartPoint(-90f)
-            .setClickListener { string, float ->
-                Log.d("ses", "s " + string)
-                Log.d("ses", "f " + float.toString())
-            }
-            .build()*/
+        /* val pieChart0 = PieChart.Builder(
+             arrayOf(
+                 Slice(30f, R.color.colorPrimary),
+                 Slice(60f, R.color.colorPrimaryDark),
+                 Slice(120f, R.color.materialIndigo600),
+                 Slice(150f, R.color.colorAccent)
+             )
+         ).setSliceStartPoint(-90f)
+             .setClickListener { string, float ->
+                 Log.d("ses", "s " + string)
+                 Log.d("ses", "f " + float.toString())
+             }
+             .build()*/
 
         // Example 2
         val pieChart1 = PieChart.Builder(
@@ -43,6 +43,16 @@ class MainActivity : AppCompatActivity() {
                 Log.d("ses", "f " + float.toString())
             }
             .build()
+
+        // Example 3
+        /*val pieChart3 = PieChart.Builder(
+            null
+        )
+            .setClickListener { string, float ->
+                Log.d("ses", "s " + string)
+                Log.d("ses", "f " + float.toString())
+            }
+            .build()*/
 
         chart.setPieChart(pieChart1)
     }
