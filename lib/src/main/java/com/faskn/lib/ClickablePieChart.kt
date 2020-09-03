@@ -42,7 +42,7 @@ class ClickablePieChart @JvmOverloads constructor(
 
     // PieChart variables
     private var pieChart: PieChart? = null
-    private var slices: List<Slice>? = null
+    private var slices: Array<Slice>? = null
 
     // Animation variables
     private var animator: ValueAnimator? = null
@@ -79,7 +79,7 @@ class ClickablePieChart @JvmOverloads constructor(
     }
 
     private fun initSlices() {
-        slices = pieChart?.slices?.toList()
+        slices = pieChart?.slices
     }
 
     private fun startAnimation() {

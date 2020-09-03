@@ -8,7 +8,7 @@ data class Slice(
     val dataPoint: Float,
     val color: Int,
     var arc: Arc? = null,
-    var scaledValue : Float? = 0f
+    var scaledValue: Float? = 0f
 )
 
 data class Arc(
