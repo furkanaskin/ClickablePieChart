@@ -89,6 +89,3 @@ chart.showLegend(legendLayout)
   </tr>
 </tbody>
 </table>
-
-**Sample usage can be foun [here](https://github.com/furkanaskin/ClickablePieChart/blob/master/app/src/main/java/com/faskn/clickablepiechart/MainActivity.kt).**
-
