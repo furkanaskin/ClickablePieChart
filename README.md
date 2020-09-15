@@ -3,7 +3,7 @@
 # ClickablePieChart
 Android Pie Chart library, supported with **Kotlin DSL**.
 
-<img height="500" src="https://user-images.githubusercontent.com/22769589/93263417-6ccd8580-f7ae-11ea-87ad-2d0bff6fa3f6.jpg" alt="PieChart"/>
+<img height="500" src="https://user-images.githubusercontent.com/22769589/93264550-f467c400-f7af-11ea-8d76-78fb0163fd04.jpg" alt="PieChart"/>
 
 ## Installation
 Step 1. Add the JitPack repository to your build file
