@@ -19,10 +19,14 @@ import android.view.View
 import android.view.animation.LinearInterpolator
 import android.widget.LinearLayout
 import android.widget.PopupWindow
+import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.view.doOnPreDraw
 import androidx.core.widget.ImageViewCompat
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.faskn.lib.legend.LegendAdapter
 import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.sin
@@ -33,7 +37,11 @@ class ClickablePieChart @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ) : View(context, attrs, defStyleAttr) {
 
-    private var slicePaint: Paint = Paint()
+    private var slicePaint: Paint = Paint().apply {
+        isAntiAlias = true
+        isDither = true
+        style = Paint.Style.FILL
+    }
     private var centerPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         color = Color.WHITE
         style = Paint.Style.FILL
@@ -59,10 +67,6 @@ class ClickablePieChart @JvmOverloads constructor(
     }
 
     private fun init() {
-        slicePaint.isAntiAlias = true
-        slicePaint.isDither = true
-        slicePaint.style = Paint.Style.FILL
-
         initSlices()
         startAnimation()
     }
@@ -161,7 +165,6 @@ class ClickablePieChart @JvmOverloads constructor(
                 radius - width,
                 centerPaint
             )
-
         }
     }
 
@@ -269,6 +272,18 @@ class ClickablePieChart @JvmOverloads constructor(
 
     fun setShowPopup(show: Boolean) {
         showPopup = show
+    }
+
+    fun showLegend(rootLayout: RelativeLayout) {
+        val recyclerView = RecyclerView(context)
+        val linearLayoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        recyclerView.layoutManager = linearLayoutManager
+        val adapter = LegendAdapter()
+        slices?.toMutableList()?.let { adapter.setup(it) }
+        recyclerView.adapter = adapter
+        recyclerView.overScrollMode = OVER_SCROLL_NEVER
+        rootLayout.addView(recyclerView)
+        invalidateAndRequestLayout()
     }
 
     private fun invalidateAndRequestLayout() {

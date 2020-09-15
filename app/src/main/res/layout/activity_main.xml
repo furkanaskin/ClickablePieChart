@@ -6,12 +6,26 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <com.faskn.lib.ClickablePieChart
-        android:id="@+id/chart"
-        android:layout_width="250dp"
-        android:layout_height="250dp"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        app:centerColor="@color/white"
-        app:popupText="Ziyaret"
-        app:showPopup="true" />
+        android:layout_margin="24dp"
+        android:orientation="horizontal">
+
+        <com.faskn.lib.ClickablePieChart
+            android:id="@+id/chart"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            app:centerColor="@color/white"
+            app:popupText="Ziyaret"
+            app:showPopup="true" />
+
+        <RelativeLayout
+            android:id="@+id/legendLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+    </LinearLayout>
 </RelativeLayout>
