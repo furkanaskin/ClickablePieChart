@@ -27,26 +27,29 @@ import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.sin
 
-
 class ClickablePieChart @JvmOverloads constructor(
     context: Context,
-    private val attrs: AttributeSet? = null,
+    attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
 ) : View(context, attrs, defStyleAttr) {
 
     private var slicePaint: Paint = Paint()
-    private var centerPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
+    private var centerPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        color = Color.WHITE
+        style = Paint.Style.FILL
+    }
     private var rectF: RectF? = null
     private var touchX = 0f
     private var touchY = 0f
 
     // PieChart variables
     private var pieChart: PieChart? = null
-    private var slices: Array<Slice>? = null
+    private var slices: ArrayList<Slice>? = null
 
     // Animation variables
     private var animator: ValueAnimator? = null
     private var currentSweepAngle = 0
+    private var showPopup = true
 
     // Attributes
     private var popupText: String? = null
@@ -60,9 +63,6 @@ class ClickablePieChart @JvmOverloads constructor(
         slicePaint.isDither = true
         slicePaint.style = Paint.Style.FILL
 
-        centerPaint.color = Color.WHITE
-        centerPaint.style = Paint.Style.FILL
-
         initSlices()
         startAnimation()
     }
@@ -73,6 +73,11 @@ class ClickablePieChart @JvmOverloads constructor(
 
         try {
             popupText = typedArray.getString(R.styleable.ClickablePieChart_popupText) ?: ""
+            centerPaint.color = typedArray.getColor(
+                R.styleable.ClickablePieChart_centerColor,
+                ContextCompat.getColor(context, android.R.color.white)
+            )
+            showPopup = typedArray.getBoolean(R.styleable.ClickablePieChart_showPopup, true)
         } finally {
             typedArray.recycle()
         }
@@ -182,16 +187,16 @@ class ClickablePieChart @JvmOverloads constructor(
                 }
 
                 var total = 0.0f
-                var forEachStopper = false // what a idiot stuff
-                slices?.forEachIndexed { index, slice ->
-                    total += (slice.scaledValue ?: 0f) % 360f
-                    if (touchAngle <= total && !forEachStopper) {
-                        pieChart?.clickListener?.invoke(touchAngle.toString(), index.toFloat())
-                        forEachStopper = true
-                        showInfoPopup(index)
+                run {
+                    slices?.forEachIndexed { index, slice ->
+                        total += (slice.scaledValue ?: 0f) % 360f
+                        if (touchAngle <= total && showPopup) {
+                            pieChart?.clickListener?.invoke(touchAngle.toString(), index.toFloat())
+                            showInfoPopup(index)
+                            return@run
+                        }
                     }
                 }
-                forEachStopper = false
                 true
             }
             else -> false
@@ -260,6 +265,10 @@ class ClickablePieChart @JvmOverloads constructor(
     fun setCenterColor(colorId: Int) {
         centerPaint.color = ContextCompat.getColor(context, colorId)
         invalidateAndRequestLayout()
+    }
+
+    fun setShowPopup(show: Boolean) {
+        showPopup = show
     }
 
     private fun invalidateAndRequestLayout() {

@@ -1,14 +1,17 @@
 package com.faskn.lib
 
+import androidx.annotation.ColorRes
+import androidx.annotation.Px
+
 /**
  * Created by turkergoksu on 12-Aug-20
  */
 
 data class Slice(
     val dataPoint: Float,
-    val color: Int,
+    @ColorRes val color: Int,
     var arc: Arc? = null,
-    var scaledValue: Float? = 0f
+    @Px var scaledValue: Float? = 0f
 )
 
 data class Arc(

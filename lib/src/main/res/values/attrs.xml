@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="ClickablePieChart">
-        <attr name="popupText" format="string"/>
+        <attr name="popupText" format="string" />
+        <attr name="centerColor" format="color" />
+        <attr name="showPopup" format="boolean" />
     </declare-styleable>
 </resources>
