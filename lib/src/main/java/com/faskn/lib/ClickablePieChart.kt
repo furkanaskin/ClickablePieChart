@@ -12,14 +12,10 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.RectF
 import android.util.AttributeSet
-import android.view.Gravity
-import android.view.LayoutInflater
-import android.view.MotionEvent
-import android.view.View
+import android.view.*
 import android.view.animation.LinearInterpolator
 import android.widget.LinearLayout
 import android.widget.PopupWindow
-import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.view.doOnPreDraw
@@ -212,11 +208,12 @@ class ClickablePieChart @JvmOverloads constructor(
         val width = LinearLayout.LayoutParams.WRAP_CONTENT
         val height = LinearLayout.LayoutParams.WRAP_CONTENT
         val popupWindow = PopupWindow(popupView, width, height, true)
-        var center = slices?.get(index)?.arc?.average()!! + pieChart?.sliceStartPoint?.toDouble()!!
+        val center = slices?.get(index)?.arc?.average()!! + pieChart?.sliceStartPoint?.toDouble()!!
         val halfRadius = rectF!!.centerX()
 
         popupView.findViewById<TextView>(R.id.textViewPopupText).text =
             "${slices?.get(index)!!.dataPoint.toInt()} $popupText"
+
         ImageViewCompat.setImageTintList(
             popupView.findViewById(R.id.imageViewPopupCircleIndicator),
             ColorStateList.valueOf(
@@ -270,11 +267,11 @@ class ClickablePieChart @JvmOverloads constructor(
         invalidateAndRequestLayout()
     }
 
-    fun setShowPopup(show: Boolean) {
+    fun showPopup(show: Boolean) {
         showPopup = show
     }
 
-    fun showLegend(rootLayout: RelativeLayout) {
+    fun showLegend(rootLayout: ViewGroup) {
         val recyclerView = RecyclerView(context)
         val linearLayoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         recyclerView.layoutManager = linearLayoutManager

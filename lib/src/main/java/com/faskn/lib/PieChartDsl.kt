@@ -11,7 +11,31 @@ data class PieChart(
     var clickListener: ((String, Float) -> Unit)?,
     var sliceStartPoint: Float?,
     var sliceWidth: Float?
-)
+) {
+    fun build(): PieChart {
+        initScaledArcs()
+        return PieChart(slices, clickListener, sliceStartPoint, sliceWidth)
+    }
+
+    private fun initScaledArcs() {
+        slices.forEachIndexed { i, slice ->
+            val scaledValue = (slice.dataPoint / getSumOfDataPoints()) * 360
+            slice.scaledValue = scaledValue
+            if (i != 0) {
+                slice.arc = Arc(
+                    slices[i - 1].arc?.sweepAngle!!,
+                    slices[i - 1].arc?.sweepAngle!!.plus(scaledValue)
+                )
+            } else {
+                slice.arc = Arc(0f, scaledValue)
+            }
+        }
+    }
+
+    private fun getSumOfDataPoints(): Float {
+        return slices.sumByDouble { slice -> slice.dataPoint.toDouble() }.toFloat()
+    }
+}
 
 fun buildChart(block: PieChartBuilder.() -> Unit) = PieChartBuilder().apply(block).build()
 

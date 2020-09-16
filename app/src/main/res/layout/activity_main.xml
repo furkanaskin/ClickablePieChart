@@ -22,10 +22,10 @@
             app:popupText="Ziyaret"
             app:showPopup="true" />
 
-        <RelativeLayout
+        <FrameLayout
             android:id="@+id/legendLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1" />
+            android:layout_weight="1.5" />
     </LinearLayout>
 </RelativeLayout>
