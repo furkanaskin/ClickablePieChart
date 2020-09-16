@@ -18,7 +18,7 @@ class MainActivity : AppCompatActivity() {
             slices { provideSlices() }
             sliceWidth { 80f }
             sliceStartPoint { 0f }
-            clickListener { angle, value ->
+            clickListener { angle, index ->
                 // ...
             }
         }

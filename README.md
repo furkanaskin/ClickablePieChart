@@ -18,47 +18,32 @@ allprojects {
 Step 2. Add the dependency
 ```gradle
 dependencies {
-  implementation 'com.github.furkanaskin:ClickablePieChart:1.0.5'
+	implementation 'com.github.furkanaskin:ClickablePieChart:1.0.6'
 }
 ```
 
 ## Usage
 
-Use buildChart function for building your chart. That's it.
 ```kotlin
-        val pieChart = buildChart {
-            slices {
-                arrayListOf(
-                    Slice(
-                        300f,
-                        R.color.colorPrimary,
-                        "Google"
-                    ),
-                    Slice(
-                        1500f,
-                        R.color.colorPrimaryDark,
-                        "Facebook"
-                    ),
-                    Slice(
-                        1240f,
-                        R.color.materialIndigo600,
-                        "Twitter"
-                    ),
-                    Slice(
-                        700f,
-                        R.color.colorAccent,
-                        "Other"
-                    )
-                )
-            }
-            sliceWidth { 80f }
-            sliceStartPoint { 0f }
-            clickListener { angle, index -> }
-        }
+        val pieChart = PieChart(
+            slices = provideSlices(), clickListener = null, sliceStartPoint = 0f, sliceWidth = 80f
+        ).build()
 
         chart.setPieChart(pieChart)
 ```
-To setup with legend (Works with **RelativeLayout**)
+Also you can use **Kotlin DSL** for building your chart.
+```kotlin
+        val pieChartDSL = buildChart {
+            slices { provideSlices() }
+            sliceWidth { 80f }
+            sliceStartPoint { 0f }
+            clickListener { angle, index ->
+                // ...
+            }
+        }
+        chart.setPieChart(pieChartDSL)
+```
+To setup with legend you need an root layout for legend.
 ```kotlin
 chart.showLegend(legendLayout)
 ```
