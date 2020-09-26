@@ -57,6 +57,7 @@ class ClickablePieChart @JvmOverloads constructor(
 
     // Attributes
     private var popupText: String? = null
+    private var showPercentage = false
 
     init {
         initAttributes(attrs)
@@ -73,6 +74,7 @@ class ClickablePieChart @JvmOverloads constructor(
 
         try {
             popupText = typedArray.getString(R.styleable.ClickablePieChart_popupText) ?: ""
+            showPercentage = typedArray.getBoolean(R.styleable.ClickablePieChart_showPercentage, false)
             centerPaint.color = typedArray.getColor(
                 R.styleable.ClickablePieChart_centerColor,
                 ContextCompat.getColor(context, android.R.color.white)
@@ -211,8 +213,11 @@ class ClickablePieChart @JvmOverloads constructor(
         val center = slices?.get(index)?.arc?.average()!! + pieChart?.sliceStartPoint?.toDouble()!!
         val halfRadius = rectF!!.centerX()
 
-        popupView.findViewById<TextView>(R.id.textViewPopupText).text =
-            "${slices?.get(index)!!.dataPoint.toInt()} $popupText"
+        var popupText = "${slices?.get(index)!!.dataPoint.toInt()} $popupText"
+        if (showPercentage) {
+            popupText = "$popupText (%${slices?.get(index)!!.percentage})"
+        }
+        popupView.findViewById<TextView>(R.id.textViewPopupText).text = popupText
 
         ImageViewCompat.setImageTintList(
             popupView.findViewById(R.id.imageViewPopupCircleIndicator),

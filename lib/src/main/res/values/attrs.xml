@@ -4,5 +4,6 @@
         <attr name="popupText" format="string" />
         <attr name="centerColor" format="color" />
         <attr name="showPopup" format="boolean" />
+        <attr name="showPercentage" format="boolean" />
     </declare-styleable>
 </resources>
