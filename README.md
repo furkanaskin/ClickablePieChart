@@ -72,5 +72,15 @@ chart.showLegend(legendLayout)
     <td>boolean</td>
     <td>Show popup when user clicks on pie chart.</td>
   </tr>
+  <tr>
+    <td>app:showPercentage</td>
+    <td>boolean</td>
+    <td>Show percentage of slice beside popupText.</td>
+  </tr>
+  <tr>
+    <td>app:animationDuration</td>
+    <td>integer</td>
+    <td>Animation duration with milliseconds.</td>
+  </tr>
 </tbody>
 </table>
