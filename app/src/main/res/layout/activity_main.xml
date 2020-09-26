@@ -21,6 +21,7 @@
             app:centerColor="@color/white"
             app:popupText="Ziyaret"
             app:showPercentage="true"
+            app:animationDuration="5000"
             app:showPopup="true" />
 
         <FrameLayout

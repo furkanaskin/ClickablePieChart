@@ -54,6 +54,7 @@ class ClickablePieChart @JvmOverloads constructor(
     private var animator: ValueAnimator? = null
     private var currentSweepAngle = 0
     private var showPopup = true
+    private var animationDuration: Int = 1000
 
     // Attributes
     private var popupText: String? = null
@@ -73,12 +74,23 @@ class ClickablePieChart @JvmOverloads constructor(
             context.theme.obtainStyledAttributes(attrs, R.styleable.ClickablePieChart, 0, 0)
 
         try {
+            // Popup text
             popupText = typedArray.getString(R.styleable.ClickablePieChart_popupText) ?: ""
+
+            // Show percentage
             showPercentage = typedArray.getBoolean(R.styleable.ClickablePieChart_showPercentage, false)
+
+            // Animation duration
+            animationDuration = typedArray.getInt(R.styleable.ClickablePieChart_animationDuration, 0)
+            if (animationDuration < 0) animationDuration = 0
+
+            // CenterPaint color
             centerPaint.color = typedArray.getColor(
                 R.styleable.ClickablePieChart_centerColor,
                 ContextCompat.getColor(context, android.R.color.white)
             )
+
+            // Show popup
             showPopup = typedArray.getBoolean(R.styleable.ClickablePieChart_showPopup, true)
         } finally {
             typedArray.recycle()
@@ -92,7 +104,7 @@ class ClickablePieChart @JvmOverloads constructor(
     private fun startAnimation() {
         animator?.cancel()
         animator = ValueAnimator.ofInt(0, 360).apply {
-            duration = 1000
+            duration = animationDuration.toLong()
             interpolator = LinearInterpolator()
             addUpdateListener { valueAnimator ->
                 currentSweepAngle = valueAnimator.animatedValue as Int
