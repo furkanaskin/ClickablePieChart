@@ -11,6 +11,7 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.RectF
+import android.graphics.drawable.ColorDrawable
 import android.util.AttributeSet
 import android.view.*
 import android.view.animation.LinearInterpolator
@@ -256,6 +257,8 @@ class ClickablePieChart @JvmOverloads constructor(
         val popupWindowY =
             (currentViewLocation[1] + halfRadius.toInt()) + calculatedY -
                     (if (calculatedY < 0) -halfOfSliceWidth else halfOfSliceWidth)
+
+        popupWindow.setBackgroundDrawable(ColorDrawable())
         popupWindow.showAtLocation(
             this,
             Gravity.NO_GRAVITY,
