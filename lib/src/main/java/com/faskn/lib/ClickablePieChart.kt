@@ -24,6 +24,7 @@ import androidx.core.widget.ImageViewCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.faskn.lib.legend.LegendAdapter
+import kotlin.math.abs
 import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.sin
@@ -75,23 +76,19 @@ class ClickablePieChart @JvmOverloads constructor(
             context.theme.obtainStyledAttributes(attrs, R.styleable.ClickablePieChart, 0, 0)
 
         try {
-            // Popup text
             popupText = typedArray.getString(R.styleable.ClickablePieChart_popupText) ?: ""
 
-            // Show percentage
-            showPercentage = typedArray.getBoolean(R.styleable.ClickablePieChart_showPercentage, false)
+            showPercentage =
+                typedArray.getBoolean(R.styleable.ClickablePieChart_showPercentage, false)
 
-            // Animation duration
-            animationDuration = typedArray.getInt(R.styleable.ClickablePieChart_animationDuration, 0)
-            if (animationDuration < 0) animationDuration = 0
+            animationDuration =
+                abs(typedArray.getInt(R.styleable.ClickablePieChart_animationDuration, 0))
 
-            // CenterPaint color
             centerPaint.color = typedArray.getColor(
                 R.styleable.ClickablePieChart_centerColor,
                 ContextCompat.getColor(context, android.R.color.white)
             )
 
-            // Show popup
             showPopup = typedArray.getBoolean(R.styleable.ClickablePieChart_showPopup, true)
         } finally {
             typedArray.recycle()
