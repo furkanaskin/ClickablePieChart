@@ -12,7 +12,8 @@ data class Slice(
     @ColorRes val color: Int,
     val name: String,
     var arc: Arc? = null,
-    @Px var scaledValue: Float? = 0f
+    @Px var scaledValue: Float? = 0f,
+    var percentage: Int? = null
 )
 
 data class Arc(

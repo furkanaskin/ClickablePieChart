@@ -14,6 +14,7 @@ data class PieChart(
 ) {
     fun build(): PieChart {
         initScaledArcs()
+        initPercentages()
         return PieChart(slices, clickListener, sliceStartPoint, sliceWidth)
     }
 
@@ -29,6 +30,21 @@ data class PieChart(
             } else {
                 slice.arc = Arc(0f, scaledValue)
             }
+        }
+    }
+
+    private fun initPercentages() {
+        var remainder = 100
+        slices.forEach { slice ->
+            val percentage = (100 * slice.scaledValue!!.toInt()) / 360
+            slice.percentage = percentage
+            remainder -= percentage
+        }
+        var i = 0
+        while (remainder != 0) {
+            slices[i].percentage = slices[i].percentage!! + 1
+            remainder -= 1
+            i = (i + 1) % 4
         }
     }
 
@@ -64,6 +80,7 @@ class PieChartBuilder {
 
     fun build(): PieChart {
         initScaledArcs()
+        initPercentages()
         return PieChart(slices, clickListener, sliceStartPoint, sliceWidth)
     }
 
@@ -79,6 +96,21 @@ class PieChartBuilder {
             } else {
                 slice.arc = Arc(0f, scaledValue)
             }
+        }
+    }
+
+    private fun initPercentages() {
+        var remainder = 100
+        slices.forEach { slice ->
+            val percentage = (100 * slice.scaledValue!!.toInt()) / 360
+            slice.percentage = percentage
+            remainder -= percentage
+        }
+        var i = 0
+        while (remainder != 0) {
+            slices[i].percentage = slices[i].percentage!! + 1
+            remainder -= 1
+            i = (i + 1) % 4
         }
     }
 

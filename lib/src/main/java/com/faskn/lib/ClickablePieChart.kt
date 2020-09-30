@@ -11,6 +11,7 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.RectF
+import android.graphics.drawable.ColorDrawable
 import android.util.AttributeSet
 import android.view.*
 import android.view.animation.LinearInterpolator
@@ -23,6 +24,7 @@ import androidx.core.widget.ImageViewCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.faskn.lib.legend.LegendAdapter
+import kotlin.math.abs
 import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.sin
@@ -54,9 +56,11 @@ class ClickablePieChart @JvmOverloads constructor(
     private var animator: ValueAnimator? = null
     private var currentSweepAngle = 0
     private var showPopup = true
+    private var animationDuration: Int = 1000
 
     // Attributes
     private var popupText: String? = null
+    private var showPercentage = false
 
     init {
         initAttributes(attrs)
@@ -73,10 +77,18 @@ class ClickablePieChart @JvmOverloads constructor(
 
         try {
             popupText = typedArray.getString(R.styleable.ClickablePieChart_popupText) ?: ""
+
+            showPercentage =
+                typedArray.getBoolean(R.styleable.ClickablePieChart_showPercentage, false)
+
+            animationDuration =
+                abs(typedArray.getInt(R.styleable.ClickablePieChart_animationDuration, 0))
+
             centerPaint.color = typedArray.getColor(
                 R.styleable.ClickablePieChart_centerColor,
                 ContextCompat.getColor(context, android.R.color.white)
             )
+
             showPopup = typedArray.getBoolean(R.styleable.ClickablePieChart_showPopup, true)
         } finally {
             typedArray.recycle()
@@ -90,7 +102,7 @@ class ClickablePieChart @JvmOverloads constructor(
     private fun startAnimation() {
         animator?.cancel()
         animator = ValueAnimator.ofInt(0, 360).apply {
-            duration = 1000
+            duration = animationDuration.toLong()
             interpolator = LinearInterpolator()
             addUpdateListener { valueAnimator ->
                 currentSweepAngle = valueAnimator.animatedValue as Int
@@ -211,8 +223,11 @@ class ClickablePieChart @JvmOverloads constructor(
         val center = slices?.get(index)?.arc?.average()!! + pieChart?.sliceStartPoint?.toDouble()!!
         val halfRadius = rectF!!.centerX()
 
-        popupView.findViewById<TextView>(R.id.textViewPopupText).text =
-            "${slices?.get(index)!!.dataPoint.toInt()} $popupText"
+        var popupText = "${slices?.get(index)!!.dataPoint.toInt()} $popupText"
+        if (showPercentage) {
+            popupText = "$popupText (%${slices?.get(index)!!.percentage})"
+        }
+        popupView.findViewById<TextView>(R.id.textViewPopupText).text = popupText
 
         ImageViewCompat.setImageTintList(
             popupView.findViewById(R.id.imageViewPopupCircleIndicator),
@@ -239,6 +254,8 @@ class ClickablePieChart @JvmOverloads constructor(
         val popupWindowY =
             (currentViewLocation[1] + halfRadius.toInt()) + calculatedY -
                     (if (calculatedY < 0) -halfOfSliceWidth else halfOfSliceWidth)
+
+        popupWindow.setBackgroundDrawable(ColorDrawable())
         popupWindow.showAtLocation(
             this,
             Gravity.NO_GRAVITY,
