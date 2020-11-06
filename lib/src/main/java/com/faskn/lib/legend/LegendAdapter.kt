@@ -47,8 +47,3 @@ open class LegendItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         itemView.textViewSliceTitle.text = slice.name
     }
 }
-
-
-
-
-

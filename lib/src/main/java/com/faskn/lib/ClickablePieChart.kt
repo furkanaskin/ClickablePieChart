@@ -288,7 +288,6 @@ class ClickablePieChart @JvmOverloads constructor(
         showPopup = show
     }
 
-
     fun showLegend(rootLayout: ViewGroup, adapter: LegendAdapter = LegendAdapter()) {
         val recyclerView = RecyclerView(context)
         val linearLayoutManager =
@@ -300,7 +299,6 @@ class ClickablePieChart @JvmOverloads constructor(
         rootLayout.addView(recyclerView)
         invalidateAndRequestLayout()
     }
-
 
     private fun invalidateAndRequestLayout() {
         invalidate()
