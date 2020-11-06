@@ -18,7 +18,7 @@ allprojects {
 Step 2. Add the dependency
 ```gradle
 dependencies {
-	implementation 'com.github.furkanaskin:ClickablePieChart:1.0.7'
+	implementation 'com.github.furkanaskin:ClickablePieChart:1.0.8'
 }
 ```
 
@@ -51,6 +51,7 @@ Or use with custom legend adapter by inheriting from LegendAdapter
 ```kotlin
 chart.showLegend(legendLayout, CustomLegendAdapter())
 ```
+Sample Custom Adapter can be found [here](https://github.com/furkanaskin/ClickablePieChart/blob/master/app/src/main/java/com/faskn/clickablepiechart/CustomLegendAdapter.kt)
 
 ## XML Attributes
 <table>
