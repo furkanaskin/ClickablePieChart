@@ -47,7 +47,7 @@ To setup with legend you need an root layout for legend.
 ```kotlin
 chart.showLegend(legendLayout)
 ```
-Or use with custom legend adapter which you can use by inheriting from LegendAdapter
+Or use with custom legend adapter by inheriting from LegendAdapter
 ```kotlin
 chart.showLegend(legendLayout, CustomLegendAdapter())
 ```
