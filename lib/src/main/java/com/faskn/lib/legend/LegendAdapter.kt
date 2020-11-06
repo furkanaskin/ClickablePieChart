@@ -38,7 +38,6 @@ open class LegendAdapter : RecyclerView.Adapter<LegendItemViewHolder>() {
     }
 }
 
-
 open class LegendItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     var boundItem: Slice? = null
     open fun bind(slice: Slice) {
