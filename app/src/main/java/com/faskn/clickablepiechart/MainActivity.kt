@@ -53,7 +53,10 @@ class MainActivity : AppCompatActivity() {
 
 
         chart4.setBarChart(barChartDSL)
-        chart4.showLegend(rootLayout = legendLayout4,orientation = LinearLayoutManager.HORIZONTAL)
+        chart4.showLegend(
+            rootLayout = legendLayout4,
+            layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        )
     }
 
     private fun provideSlices(): ArrayList<Slice> {
