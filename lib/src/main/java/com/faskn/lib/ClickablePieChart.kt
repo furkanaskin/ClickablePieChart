@@ -62,6 +62,10 @@ class ClickablePieChart @JvmOverloads constructor(
     private var popupText: String? = null
     private var showPercentage = false
 
+    private var defaultLayoutManager =
+        LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+
+
     init {
         initAttributes(attrs)
     }
@@ -288,11 +292,13 @@ class ClickablePieChart @JvmOverloads constructor(
         showPopup = show
     }
 
-    fun showLegend(rootLayout: ViewGroup, adapter: LegendAdapter = LegendAdapter()) {
+    fun showLegend(
+        rootLayout: ViewGroup,
+        adapter: LegendAdapter = LegendAdapter(),
+        layoutManager: RecyclerView.LayoutManager = defaultLayoutManager
+    ) {
         val recyclerView = RecyclerView(context)
-        val linearLayoutManager =
-            LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-        recyclerView.layoutManager = linearLayoutManager
+        recyclerView.layoutManager = layoutManager
         recyclerView.adapter = adapter
         slices?.toMutableList()?.let { adapter.setup(it) }
         recyclerView.overScrollMode = OVER_SCROLL_NEVER

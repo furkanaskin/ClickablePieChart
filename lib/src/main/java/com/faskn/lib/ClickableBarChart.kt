@@ -54,6 +54,10 @@ class ClickableBarChart @JvmOverloads constructor(
     private var currentAnimationPercentage = 0
     private var orientation: Orientation = Orientation.HORIZONTAL
 
+    private var defaultLayoutManager =
+        LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+
+
     init {
         initAttributes(attrs)
     }
@@ -254,7 +258,7 @@ class ClickableBarChart @JvmOverloads constructor(
             popupView.doOnPreDraw {
                 popupWindow.update(
                     currentViewLocation[0] + (parent.measuredWidth / 2) - (it.width / 2),
-                    (currentViewLocation[1] +  parent.measuredHeight - (parent.measuredHeight * center) / 100),
+                    (currentViewLocation[1] + parent.measuredHeight - (parent.measuredHeight * center) / 100),
                     popupWindow.width,
                     popupWindow.height
                 )
@@ -286,18 +290,11 @@ class ClickableBarChart @JvmOverloads constructor(
     fun showLegend(
         rootLayout: ViewGroup,
         adapter: LegendAdapter = LegendAdapter(),
-        orientation: Int = LinearLayoutManager.VERTICAL
+        layoutManager: RecyclerView.LayoutManager = defaultLayoutManager
     ) {
         val recyclerView = RecyclerView(context)
-        val linearLayoutManager =
-            LinearLayoutManager(
-                context, if (orientation == LinearLayoutManager.VERTICAL) {
-                    LinearLayoutManager.VERTICAL
-                } else {
-                    LinearLayoutManager.HORIZONTAL
-                }, false
-            )
-        recyclerView.layoutManager = linearLayoutManager
+
+        recyclerView.layoutManager = layoutManager
         recyclerView.adapter = adapter
         slices?.toMutableList()?.let { adapter.setup(it) }
         recyclerView.overScrollMode = OVER_SCROLL_NEVER
