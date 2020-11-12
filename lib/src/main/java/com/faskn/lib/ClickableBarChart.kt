@@ -52,9 +52,7 @@ class ClickableBarChart @JvmOverloads constructor(
     private var popupText: String? = null
     private var showPercentage = false
     private var currentAnimationPercentage = 0
-
     private var orientation: Orientation = Orientation.HORIZONTAL
-
 
     init {
         initAttributes(attrs)
@@ -107,18 +105,6 @@ class ClickableBarChart @JvmOverloads constructor(
         slices = barChart?.slices
     }
 
-
-    /*override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
-        super.onSizeChanged(w, h, oldw, oldh)
-
-        rectF = RectF(
-            0f,
-            0f,
-            width.coerceAtMost(height).toFloat(),
-            width.coerceAtMost(height).toFloat()
-        )
-    }*/
-
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
 
@@ -149,7 +135,6 @@ class ClickableBarChart @JvmOverloads constructor(
                             slicePaint
                         )
                     }
-
                 } else {
 
                     if (startPercentage < currentAnimationPercentage && endPercentage <= currentAnimationPercentage) {
@@ -170,8 +155,6 @@ class ClickableBarChart @JvmOverloads constructor(
                         )
                     }
                 }
-
-
 
                 startPercentage = endPercentage
             }
@@ -267,7 +250,6 @@ class ClickableBarChart @JvmOverloads constructor(
         val currentViewLocation = IntArray(2)
         this.getLocationOnScreen(currentViewLocation)
 
-
         if (orientation == Orientation.VERTICAL) {
             popupView.doOnPreDraw {
                 popupWindow.update(
@@ -296,7 +278,6 @@ class ClickableBarChart @JvmOverloads constructor(
         init()
         invalidateAndRequestLayout()
     }
-
 
     fun showPopup(show: Boolean) {
         showPopup = show
