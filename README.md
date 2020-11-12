@@ -36,7 +36,8 @@ Or create a BarChart
 
 ```kotlin
         val barChart = BarChart(
-            slices = provideSlices(), clickListener = null).build()
+            slices = provideSlices(), clickListener = null
+        ).build()
 
         chart.setBarChart(barChart)
 ```
