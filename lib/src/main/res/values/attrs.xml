@@ -6,5 +6,6 @@
         <attr name="showPopup" format="boolean" />
         <attr name="showPercentage" format="boolean" />
         <attr name="animationDuration" format="integer" />
+        <attr name="orientation" format="string" />
     </declare-styleable>
 </resources>

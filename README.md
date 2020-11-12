@@ -1,9 +1,9 @@
 [![](https://jitpack.io/v/furkanaskin/ClickablePieChart.svg)](https://jitpack.io/#furkanaskin/ClickablePieChart)
 
 # ClickablePieChart
-Android Pie Chart library, supported with **Kotlin DSL**.
+Android Chart library, supported with **Kotlin DSL**.
 
-<img height="500" src="https://user-images.githubusercontent.com/22769589/93264550-f467c400-f7af-11ea-8d76-78fb0163fd04.jpg" alt="PieChart"/>
+<img height="500" src="/assets/device-2020-11-12-104411.png" alt="PieChart"/>
 
 ## Installation
 Step 1. Add the JitPack repository to your build file
@@ -31,6 +31,16 @@ dependencies {
 
         chart.setPieChart(pieChart)
 ```
+
+Or create a BarChart
+
+```kotlin
+        val barChart = BarChart(
+            slices = provideSlices(), clickListener = null).build()
+
+        chart.setBarChart(barChart)
+```
+
 Also you can use **Kotlin DSL** for building your chart.
 ```kotlin
         val pieChartDSL = buildChart {
@@ -43,6 +53,20 @@ Also you can use **Kotlin DSL** for building your chart.
         }
         chart.setPieChart(pieChartDSL)
 ```
+
+Or create a BarChart
+
+```kotlin
+         val barChartDSL = buildBarChart {
+                    slices { provideSlices() }
+                    clickListener { percentage, index ->
+                        // ...
+                    }
+                }
+        chart.setBarChart(barChartDSL)
+```
+
+
 To setup with legend you need an root layout for legend.
 ```kotlin
 chart.showLegend(legendLayout)
@@ -87,5 +111,10 @@ chart.showLegend(legendLayout, CustomLegendAdapter())
     <td>integer</td>
     <td>Animation duration with milliseconds.</td>
   </tr>
+   <tr>
+      <td>app:orientation</td>
+      <td>string</td>
+      <td>Orientation of BarChart (horizontal/vertical)</td>
+    </tr>
 </tbody>
 </table>
