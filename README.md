@@ -77,6 +77,11 @@ Or use with custom legend adapter by inheriting from LegendAdapter
 chart.showLegend(legendLayout, CustomLegendAdapter())
 ```
 
+Or if you use a barChart you can also change the orientation of the legendAdapter
+```kotlin
+ chart4.showLegend(rootLayout = legendLayout, orientation = LinearLayoutManager.HORIZONTAL or LinearLayoutManager.VERTICAL)
+```
+
 ## XML Attributes
 <table>
 <thead>
