@@ -288,11 +288,14 @@ class ClickablePieChart @JvmOverloads constructor(
         showPopup = show
     }
 
-    fun showLegend(rootLayout: ViewGroup, adapter: LegendAdapter = LegendAdapter()) {
+    fun showLegend(
+        rootLayout: ViewGroup,
+        adapter: LegendAdapter = LegendAdapter(),
+        layoutManager: RecyclerView.LayoutManager? = null
+    ) {
         val recyclerView = RecyclerView(context)
-        val linearLayoutManager =
-            LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-        recyclerView.layoutManager = linearLayoutManager
+        recyclerView.layoutManager =
+            layoutManager ?: LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         recyclerView.adapter = adapter
         slices?.toMutableList()?.let { adapter.setup(it) }
         recyclerView.overScrollMode = OVER_SCROLL_NEVER

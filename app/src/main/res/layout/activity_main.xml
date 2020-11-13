@@ -1,63 +1,123 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:weightSum="2"
-    tools:context=".MainActivity">
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="24dp"
-        android:layout_weight="1"
-        android:orientation="horizontal">
+        android:orientation="vertical"
+        tools:context=".MainActivity">
 
-        <com.faskn.lib.ClickablePieChart
-            android:id="@+id/chart"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            app:animationDuration="2000"
-            app:centerColor="@color/white"
-            app:popupText="Ziyaret"
-            app:showPercentage="true"
-            app:showPopup="true" />
-
-        <FrameLayout
-            android:id="@+id/legendLayout"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1.5" />
-    </LinearLayout>
+            android:layout_margin="24dp"
+            android:weightSum="2"
+            android:orientation="horizontal">
+
+            <com.faskn.lib.ClickablePieChart
+                android:id="@+id/chart"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_weight="1"
+                app:animationDuration="2000"
+                app:centerColor="@color/white"
+                app:popupText="Ziyaret"
+                app:showPopup="true" />
+
+            <FrameLayout
+                android:id="@+id/legendLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+        </LinearLayout>
 
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="24dp"
-
-        android:layout_weight="1"
-        android:orientation="horizontal">
-
-        <com.faskn.lib.ClickablePieChart
-            android:id="@+id/chart2"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            app:animationDuration="2000"
-            app:centerColor="@color/white"
-            app:popupText="Ziyaret"
-            app:showPercentage="true"
-            app:showPopup="true" />
-
-        <FrameLayout
-            android:id="@+id/legendLayout2"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1.5" />
+            android:layout_margin="24dp"
+            android:weightSum="1"
+            android:orientation="horizontal">
+
+            <com.faskn.lib.ClickablePieChart
+                android:id="@+id/chart2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                app:animationDuration="2000"
+                app:centerColor="@color/white"
+                app:popupText="Ziyaret"
+                app:showPercentage="true"
+                app:showPopup="true" />
+
+            <FrameLayout
+                android:id="@+id/legendLayout2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="24dp"
+            android:weightSum="2"
+            android:orientation="vertical">
+
+
+            <com.faskn.lib.ClickableBarChart
+                android:id="@+id/chart4"
+                android:layout_marginStart="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_weight="1"
+                app:orientation="horizontal"
+                app:animationDuration="2000"
+                app:popupText="Ziyaret"
+                app:showPercentage="true"
+                app:showPopup="true" />
+
+            <FrameLayout
+                android:id="@+id/legendLayout4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="24dp"
+            android:weightSum="2"
+            android:orientation="horizontal">
+
+            <com.faskn.lib.ClickableBarChart
+                android:id="@+id/chart3"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_weight="1"
+                app:animationDuration="2000"
+                app:popupText="Ziyaret"
+                app:showPercentage="true"
+                app:showPopup="true" />
+
+            <FrameLayout
+                android:id="@+id/legendLayout3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+        </LinearLayout>
+
+
+
     </LinearLayout>
 
-</LinearLayout>
+</ScrollView>

@@ -2,11 +2,10 @@ package com.faskn.clickablepiechart
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.faskn.lib.PieChart
-import com.faskn.lib.Slice
-import com.faskn.lib.buildChart
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.faskn.lib.*
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlin.random.Random
+
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -17,7 +16,7 @@ class MainActivity : AppCompatActivity() {
         val pieChartDSL = buildChart {
             slices { provideSlices() }
             sliceWidth { 80f }
-            sliceStartPoint { 0f }
+            sliceStartPoint { -90f }
             clickListener { angle, index ->
                 // ...
             }
@@ -34,29 +33,51 @@ class MainActivity : AppCompatActivity() {
         chart.showLegend(legendLayout)
 
         //OR SET WITH CUSTOMER LEGEND ADAPTER
-        chart2.setPieChart(pieChart)
-        chart2.showLegend(legendLayout2,CustomLegendAdapter())
+        //chart2.setPieChart(pieChart)
+        //chart2.showLegend(legendLayout2,CustomLegendAdapter())
+
+
+        val barChart = BarChart(
+            slices = provideSlices(), clickListener = null
+        ).build()
+
+        val barChartDSL = buildBarChart {
+            slices { provideSlices() }
+            clickListener { percentage, index ->
+                // ...
+            }
+        }
+
+        chart3.setBarChart(barChart)
+        chart3.showLegend(legendLayout3)
+
+
+        chart4.setBarChart(barChartDSL)
+        chart4.showLegend(
+            rootLayout = legendLayout4,
+            layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        )
     }
 
     private fun provideSlices(): ArrayList<Slice> {
         return arrayListOf(
             Slice(
-                Random.nextInt(1000, 3000).toFloat(),
+                2F,
                 R.color.colorPrimary,
                 "Google"
             ),
             Slice(
-                Random.nextInt(1000, 2000).toFloat(),
+                2F,
                 R.color.colorPrimaryDark,
                 "Facebook"
             ),
             Slice(
-                Random.nextInt(1000, 5000).toFloat(),
+                1F,
                 R.color.materialIndigo600,
                 "Twitter"
             ),
             Slice(
-                Random.nextInt(1000, 10000).toFloat(),
+                4F,
                 R.color.colorAccent,
                 "Other"
             )
