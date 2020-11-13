@@ -72,17 +72,9 @@ class BarChartBuilder {
     }
 
     private fun initPercentages() {
-        var remainder = 100
-        slices.forEach { slice ->
-            val percentage = (slice.scaledValue!! * 100).toInt()
-            slice.percentage = percentage
-            remainder -= percentage
-        }
-        var i = 0
-        while (remainder != 0) {
-            slices[i].percentage = slices[i].percentage!! + 1
-            remainder -= 1
-            i = (i + 1) % 4
+        slices.forEachIndexed { index,slice ->
+            val percentage = (100 * slice.scaledValue!!).toInt()
+            slices[index].percentage = percentage
         }
     }
 
