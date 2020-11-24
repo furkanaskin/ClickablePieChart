@@ -1,4 +1,4 @@
-[![](https://jitpack.io/v/furkanaskin/ClickablePieChart.svg)](https://jitpack.io/#furkanaskin/ClickablePieChart)
+[![](https://jitpack.io/v/gsotti/ClickablePieChart.svg)](https://jitpack.io/#gsotti/ClickablePieChart)
 
 # ClickablePieChart
 Android Chart library, supported with **Kotlin DSL**.
