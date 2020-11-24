@@ -18,7 +18,7 @@ allprojects {
 Step 2. Add the dependency
 ```gradle
 dependencies {
-	implementation 'com.github.furkanaskin:ClickablePieChart:1.0.7'
+	implementation 'com.github.gsotti:ClickablePieChart:1.0.12'
 }
 ```
 
