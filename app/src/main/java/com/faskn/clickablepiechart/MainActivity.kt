@@ -32,6 +32,10 @@ class MainActivity : AppCompatActivity() {
 
         chart.setPieChart(pieChart)
         chart.showLegend(legendLayout)
+
+        //OR SET WITH CUSTOMER LEGEND ADAPTER
+        chart2.setPieChart(pieChart)
+        chart2.showLegend(legendLayout2,CustomLegendAdapter())
     }
 
     private fun provideSlices(): ArrayList<Slice> {
