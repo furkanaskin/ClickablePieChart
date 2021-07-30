@@ -62,6 +62,9 @@ class ClickablePieChart @JvmOverloads constructor(
     private var popupText: String? = null
     private var showPercentage = false
 
+    // Popup window
+    private var popupWindow: PopupWindow? = null
+
     init {
         initAttributes(attrs)
     }
@@ -219,7 +222,7 @@ class ClickablePieChart @JvmOverloads constructor(
         val popupView = inflater.inflate(R.layout.popup_slice, null)
         val width = LinearLayout.LayoutParams.WRAP_CONTENT
         val height = LinearLayout.LayoutParams.WRAP_CONTENT
-        val popupWindow = PopupWindow(popupView, width, height, true)
+        popupWindow = PopupWindow(popupView, width, height, true)
         val center = slices?.get(index)?.arc?.average()!! + pieChart?.sliceStartPoint?.toDouble()!!
         val halfRadius = rectF!!.centerX()
 
@@ -255,21 +258,23 @@ class ClickablePieChart @JvmOverloads constructor(
             (currentViewLocation[1] + halfRadius.toInt()) + calculatedY -
                     (if (calculatedY < 0) -halfOfSliceWidth else halfOfSliceWidth)
 
-        popupWindow.setBackgroundDrawable(ColorDrawable())
-        popupWindow.showAtLocation(
-            this,
-            Gravity.NO_GRAVITY,
-            popupWindowX,
-            popupWindowY
-        )
-
-        popupView.doOnPreDraw {
-            popupWindow.update(
-                (popupWindowX - (it.width / 2)),
-                popupWindowY,
-                popupWindow.width,
-                popupWindow.height
+        popupWindow?.let { window ->
+            window.setBackgroundDrawable(ColorDrawable())
+            window.showAtLocation(
+                this,
+                Gravity.NO_GRAVITY,
+                popupWindowX,
+                popupWindowY
             )
+
+            popupView.doOnPreDraw {
+                window.update(
+                    (popupWindowX - (it.width / 2)),
+                    popupWindowY,
+                    window.width,
+                    window.height
+                )
+            }
         }
     }
 
@@ -286,6 +291,10 @@ class ClickablePieChart @JvmOverloads constructor(
 
     fun showPopup(show: Boolean) {
         showPopup = show
+    }
+
+    fun dismissPopup() {
+        popupWindow?.dismiss()
     }
 
     fun showLegend(rootLayout: ViewGroup) {
