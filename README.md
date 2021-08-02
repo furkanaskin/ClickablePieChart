@@ -1,4 +1,6 @@
 [![](https://jitpack.io/v/furkanaskin/ClickablePieChart.svg)](https://jitpack.io/#furkanaskin/ClickablePieChart)
+[![DevLibrary](https://img.shields.io/badge/Part%20of-DevLibrary-9cf?color=4285F4&logoColor=4285F4&logo=google)](https://devlibrary.withgoogle.com/products/android/repos/furkanaskin-ClickablePieChart)
+[![AndroidArsenal](https://img.shields.io/badge/Android%20Arsenal-ClickablePieChart-orange)](https://android-arsenal.com/details/1/8168)
 
 # ClickablePieChart
 Android Pie Chart library, supported with **Kotlin DSL**.
