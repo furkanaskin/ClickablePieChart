@@ -8,7 +8,7 @@ import androidx.annotation.Px
  */
 
 data class Slice(
-    val dataPoint: Float,
+    val dataPoint: String,
     @ColorRes val color: Int,
     val name: String,
     var arc: Arc? = null,
